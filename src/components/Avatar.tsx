@@ -1,6 +1,11 @@
 import styles from './Avatar.module.css'
 
-export function Avatar({ src, hasBorder }) {
+interface AvatarProps {
+    hasBorder: boolean,
+    src: string
+}
+
+export function Avatar({ src, hasBorder }: AvatarProps) {
     return (
         <img 
             className={hasBorder ? styles.avatarWithBorder : styles.avatar} 

@@ -3,10 +3,23 @@ import { Comment } from './Comment'
 import { Avatar } from './Avatar'
 import { format, formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { useState } from 'react'
+import { ChangeEvent, FormEvent, InvalidEvent, useState } from 'react'
 
-export function Post ({ author, content, hashtags, publishedAt }) {
-    const [comments, setComments] = useState([])
+interface Author {
+    avatarUrl: string,
+    name: string,
+    role: string
+}
+
+interface PostProps {
+    author: Author,
+    content: string,
+    hashtags: string[],
+    publishedAt: Date
+}
+
+export function Post ({ author, content, hashtags, publishedAt }: PostProps) {
+    const [comments, setComments] = useState<string[]>([])
     const [newCommentText, setNewCommentText] = useState('')
     const publishedDateFormated = format(publishedAt, "d 'de' LLLL 'às' HH:mm'h'", {
         locale: ptBR
@@ -18,25 +31,25 @@ export function Post ({ author, content, hashtags, publishedAt }) {
 
     const newCommentIsEmpty = newCommentText.length == 0
 
-    function handleCreateNewComment() {
+    function handleCreateNewComment(event: FormEvent) {
         event.preventDefault()
         setComments([...comments, newCommentText])
         setNewCommentText('')
     }
 
-    function handleNewCommentChange() {
+    function handleNewCommentChange(event: ChangeEvent<HTMLTextAreaElement>) {
         event.target.setCustomValidity('')
         setNewCommentText(event.target.value)
     }
 
-    function deleteComment(commentToDelete) {
+    function deleteComment(commentToDelete: string) {
         const commentsWithoutDeletedOne = comments.filter(comment => {
             return comment !== commentToDelete
         })
         setComments(commentsWithoutDeletedOne)
     }
 
-    function handleNewCommentOnInvalid() {
+    function handleNewCommentOnInvalid(event: InvalidEvent<HTMLTextAreaElement>) {
         event.target.setCustomValidity('Esse campo é obrigatório!')
     }
 
