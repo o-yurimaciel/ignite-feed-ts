@@ -5,7 +5,7 @@ import { useState } from 'react'
 
 interface CommentProps {
     comment: string,
-    onDeleteComment: Function
+    onDeleteComment: (comment: string) => void
 }
 
 export function Comment({ comment, onDeleteComment }: CommentProps) {
